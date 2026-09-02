@@ -7,11 +7,6 @@ Pipeline para elegir **la mejor casa de flip** en Córdoba Capital.
 - Filtros: escritura, no pozo, techo USD 100k
 - Núcleo: Jardín, San Fernando, San Daniel, Res. / Parque Vélez, Parque Atlántica
 
-## Sheets vivos
-
-- https://docs.google.com/spreadsheets/d/1hL-IvquK5f-J5OCxa4ZP-gM0LU_rfNPo92RNYUQNK0U
-- https://docs.google.com/spreadsheets/d/1Mx7AWebClNpMjrDmyjFgIYSfz3HOQLGA
-
 ## Markdowns
 
 - `data/` pestañas del Excel
