@@ -1,0 +1,49 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="utf-8"/>
+<meta name="viewport" content="width=device-width, initial-scale=1"/>
+<title>Ranking flip Capital</title>
+<link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css"/>
+<style>
+html,body{margin:0;height:100%;font-family:Arial,sans-serif}
+.wrap{display:flex;height:100%}
+aside{width:360px;border-right:1px solid #ddd;display:flex;flex-direction:column}
+header{background:#1b365d;color:#fff;padding:12px}
+.list{overflow:auto;flex:1}
+.card{padding:8px 12px;border-bottom:1px solid #eee;cursor:pointer}
+#map{flex:1}
+@media(max-width:720px){.wrap{flex-direction:column}aside{width:100%;height:40%}}
+</style></head>
+<body>
+<div class="wrap"><aside><header><h1 style="margin:0;font-size:16px">Flip Capital</h1>
+<p style="margin:4px 0 0;font-size:12px">02-sep-2026 · spread local · no sesgo sur</p></header>
+<div class="list" id="list"></div></aside><div id="map"></div></div>
+<script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
+<script>
+const H=[
+{id:"AC01",r:1,b:"Alta Córdoba",d:"Quevedo ~1200",p:30500,m:207,s:86,link:"https://www.zonaprop.com.ar/propiedades/clasificado/veclcain-casa-alta-cordoba-57037599.html",comp:"https://www.zonaprop.com.ar/casas-venta-alta-cordoba-3-ambientes-sin-garages-orden-precio-ascendente.html",lat:-31.3898,lon:-64.1755},
+{id:"LP01",r:2,b:"Los Paraísos",d:"Anacreonte 1500",p:33000,m:222,s:84,link:"https://www.zonaprop.com.ar/propiedades/clasificado/veclcain-casa-venta-2-dor-a-reciclar-barrio-los-paraisos-57311622.html",comp:"https://www.zonaprop.com.ar/casas-venta-alta-cordoba-orden-precio-ascendente.html",lat:-31.3815,lon:-64.1688},
+{id:"SC01",r:3,b:"Sargento Cabral",d:"Arcos 3181",p:30000,m:194,s:81,link:"https://www.zonaprop.com.ar/propiedades/clasificado/veclcain-para-invertir-casa-dpto-interno-a-refaccionar-b-54790016.html",comp:"https://www.zonaprop.com.ar/casas-venta-cordoba-cb-orden-precio-ascendente-q-reciclar.html",lat:-31.3682,lon:-64.1528},
+{id:"AA03",r:4,b:"Alto Alberdi",d:"Deán Funes 3400",p:45000,m:240,s:80,link:"https://www.zonaprop.com.ar/propiedades/clasificado/veclcain-venta-casa-a-reciclar.-a-una-cuadra-av-colon-alto-58476792.html",comp:"https://www.zonaprop.com.ar/casas-alto-alberdi-con-patio-mas-de-3-ambientes.html",lat:-31.4074,lon:-64.2088},
+{id:"AA04",r:5,b:"Alto Alberdi",d:"Esperanto 269",p:50000,m:400,s:79,link:"https://www.zonaprop.com.ar/propiedades/clasificado/veclcain-a-reciclar-casa-de-2-dorm-en-terreno-de-400-m-sup2-58076388.html",comp:"https://www.zonaprop.com.ar/casas-alto-alberdi-con-patio-mas-de-3-ambientes.html",lat:-31.4086,lon:-64.1982},
+{id:"AA01",r:6,b:"Alto Alberdi",d:"Gabino Blanco 2962",p:45000,m:216,s:77,link:"https://www.zonaprop.com.ar/propiedades/clasificado/veclcain-casa-a-reciclar-en-venta-en-calle-gabino-blanco-2962-b-59105865.html",comp:"https://www.zonaprop.com.ar/casas-alto-alberdi-con-patio-mas-de-3-ambientes.html",lat:-31.4132,lon:-64.2145},
+{id:"AA02",r:7,b:"Alto Alberdi",d:"Durrieu 2578",p:45000,m:180,s:76,link:"https://www.zonaprop.com.ar/propiedades/clasificado/veclcain-oportunidad-en-alto-alberdi!-casa-a-reciclar-a-m-de-av-58792498.html",comp:"https://www.zonaprop.com.ar/casas-alto-alberdi-con-patio-mas-de-3-ambientes.html",lat:-31.4110,lon:-64.2075},
+{id:"SN01",r:8,b:"San Nicolás",d:"Helsinski 2364",p:32000,m:250,s:75,link:"https://www.zonaprop.com.ar/propiedades/clasificado/veclcain-san-nicolas-helsinski-2364-casa-depto-a-reciclar-59388578.html",comp:"https://www.zonaprop.com.ar/casas-venta-cordoba-cb-orden-precio-ascendente-q-reciclar.html",lat:-31.3528,lon:-64.1485},
+{id:"SD01",r:11,b:"San Daniel",d:"Eliseo Soaje",p:47500,m:276,s:72,link:"https://www.zonaprop.com.ar/casas-venta-san-daniel.html",comp:"https://www.zonaprop.com.ar/propiedades/clasificado/veclcain-casa-3-dorm.-apto-credito-residencial-velez-sarsfield-59080716.html",lat:-31.45079,lon:-64.20308},
+{id:"J05",r:15,b:"Jardín",d:"Industria 801",p:72500,m:226,s:68,link:"https://www.zonaprop.com.ar/propiedades/clasificado/veclcain-casa-en-barrio-jardin-59880485.html",comp:"https://www.zonaprop.com.ar/propiedades/clasificado/veclcain-venta-casa-3-dor-en-b-jardin-apta-credito-59557747.html",lat:-31.44295,lon:-64.1848}
+];
+const map=L.map("map").setView([-31.405,-64.185],12.2);
+L.tileLayer("https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png",{maxZoom:19}).addTo(map);
+const mk={};
+H.forEach(h=>{
+ const c=h.s>=73?"#0f6e56":h.s>=65?"#b45309":"#6b7280";
+ const m=L.circleMarker([h.lat,h.lon],{radius:9,color:"#fff",weight:2,fillColor:c,fillOpacity:0.95}).addTo(map);
+ m.bindPopup(`<b>#${h.r} ${h.id} ${h.b}</b><br>USD ${h.p}<br>${h.d} · ${h.m} m² · score ${h.s}<br><a href="${h.link}" target="_blank">aviso</a> · <a href="${h.comp}" target="_blank">comparable</a>`);
+ mk[h.id]=m;
+ const d=document.createElement("div"); d.className="card";
+ d.innerHTML=`<b>#${h.r} ${h.id}</b> ${h.p/1000}k<br>${h.d} · ${h.b}`;
+ d.onclick=()=>{map.setView([h.lat,h.lon],16);mk[h.id].openPopup();};
+ document.getElementById("list").appendChild(d);
+});
+</script></body></html>
