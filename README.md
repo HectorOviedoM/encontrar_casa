@@ -1,7 +1,10 @@
 # encontrar_casa
 
-**Empezá acá → [RANKING.md](RANKING.md)**  
-Mapa interactivo → [MAPA.html](MAPA.html) (descargar y abrir en el navegador)  
-Reglas → [COMO_FUNCIONA.md](COMO_FUNCIONA.md)
+**Ranking (112 casas)** → [RANKING.md](RANKING.md)
 
-Techo USD 100k. Criterio vigente: spread vs comparable **del mismo barrio**, no se premia corona sur.
+**Mapa que sí abre en el celu** → https://raw.githack.com/HectorOviedoM/encontrar_casa/main/MAPA.html
+
+La vista de GitHub (código) no corre el mapa. Usá el link de arriba.
+
+Fuentes: Zonaprop, La Voz, Argenprop, MercadoLibre, Properati, iCasas, Buscainmueble, RE/MAX, JB Srur.
+Techo USD 100k. Criterio: spread vs comparable del mismo barrio.
